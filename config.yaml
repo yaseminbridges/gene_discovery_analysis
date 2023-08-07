@@ -1,0 +1,4 @@
+score_name: EXOMISER_GENE_COMBINED_SCORE # EXOMISER_GENE_COMBINED_SCORE, EXOMISER_GENE_PHENO_SCORE, EXOMISER_GENE_VARIANT_SCORE, EXOMISER_VARIANT_SCORE
+max_rank: 10
+whitelist_filter: False # Either true or false for filtering on this condition
+contributing_variant_filter: False # Either true or false for filtering on this condition
