@@ -1,1 +1,1 @@
-# gene_discovery
+# Gene Discovery Analysis Pipeline
