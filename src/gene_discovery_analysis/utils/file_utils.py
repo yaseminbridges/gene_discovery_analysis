@@ -10,7 +10,7 @@ def parse_analysis_config(analysis_config: Path) -> Configurations:
     with open(analysis_config, "r") as config_file:
         config = yaml.safe_load(config_file)
     config_file.close()
-    return Configurations.model_validate(config)
+    return Configurations.parse_obj(config)
 
 
 def get_variant_tsv_files(results_dir: Path) -> [Path]:
