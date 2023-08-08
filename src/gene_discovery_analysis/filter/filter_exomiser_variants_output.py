@@ -23,7 +23,9 @@ class FilterExomiserVariantsOutput:
     @staticmethod
     def rank_scores(variants_df: pd.DataFrame, score_name: str) -> int:
         """Add ranks to a result, equal scores are given the same rank e.g., 1,1,3."""
-        variants_df['NEW_RANK'] = variants_df[score_name].rank(method='dense', ascending=False).astype(int)
+        variants_df["NEW_RANK"] = (
+            variants_df[score_name].rank(method="dense", ascending=False).astype(int)
+        )
         return variants_df
 
     @staticmethod
@@ -51,11 +53,11 @@ class FilterExomiserVariantsOutput:
         return variants_df[variants_df["CONTRIBUTING_VARIANT"] != 0]
 
     def filter_output(
-            self,
-            variants_df: pd.DataFrame,
-            max_rank: int,
-            whitelist_filter: bool,
-            contributing_variant_filter: bool,
+        self,
+        variants_df: pd.DataFrame,
+        max_rank: int,
+        whitelist_filter: bool,
+        contributing_variant_filter: bool,
     ) -> pd.DataFrame:
         """Return filtered prioritised variant output."""
         filtered_variants = self.filter_max_rank(variants_df, max_rank)
@@ -66,15 +68,17 @@ class FilterExomiserVariantsOutput:
         return filtered_variants
 
     def create_filtered_output(
-            self,
-            variants_df: pd.DataFrame,
-            score_name: str,
-            max_rank: int,
-            whitelist_filter: bool,
-            contributing_variant_filter: bool,
+        self,
+        variants_df: pd.DataFrame,
+        score_name: str,
+        max_rank: int,
+        whitelist_filter: bool,
+        contributing_variant_filter: bool,
     ) -> pd.DataFrame:
         """Create the filtered prioritised variant output with annotated transcript ID."""
-        sorted_variants_df = self.rank_scores(self.sort_results(variants_df, score_name), score_name)
+        sorted_variants_df = self.rank_scores(
+            self.sort_results(variants_df, score_name), score_name
+        )
         filtered_variants = self.filter_output(
             sorted_variants_df, max_rank, whitelist_filter, contributing_variant_filter
         )
@@ -82,7 +86,7 @@ class FilterExomiserVariantsOutput:
 
 
 def write_filtered_output(
-        variant_tsv_file: Path, output_dir: Path, filtered_variants_df: pd.DataFrame
+    variant_tsv_file: Path, output_dir: Path, filtered_variants_df: pd.DataFrame
 ) -> None:
     """Write filtered Exomiser variant tsv output to a tsv file."""
     filtered_variants_df.to_csv(
