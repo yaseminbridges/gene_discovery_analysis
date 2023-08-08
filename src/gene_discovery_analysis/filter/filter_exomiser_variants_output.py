@@ -20,11 +20,11 @@ class FilterExomiserVariantsOutput:
         """Sort results."""
         return variants_df.sort_values(by=score_name, ascending=False)
 
-    @staticmethod
-    def rank_scores(variants_df: pd.DataFrame, score_name: str) -> int:
-        """Add ranks to a result, equal scores are given the same rank e.g., 1,1,3."""
-        variants_df['NEW_RANK'] = variants_df[score_name].rank(method='min', ascending=False).astype(int)
-        return variants_df
+    # @staticmethod
+    # def rank_scores(variants_df: pd.DataFrame, score_name: str) -> int:
+    #     """Add ranks to a result, equal scores are given the same rank e.g., 1,1,3."""
+    #     variants_df['NEW_RANK'] = variants_df[score_name].rank(method='min', ascending=False).astype(int)
+    #     return variants_df
 
     @staticmethod
     def filter_max_rank(variants_df: pd.DataFrame, max_rank: int) -> pd.DataFrame:
@@ -74,9 +74,9 @@ class FilterExomiserVariantsOutput:
             contributing_variant_filter: bool,
     ) -> pd.DataFrame:
         """Create the filtered prioritised variant output with annotated transcript ID."""
-        sorted_variants_df = self.rank_scores(self.sort_results(variants_df, score_name), score_name)
+        # sorted_variants_df = self.rank_scores(self.sort_results(variants_df, score_name), score_name)
         filtered_variants = self.filter_output(
-            sorted_variants_df, max_rank, whitelist_filter, contributing_variant_filter
+            variants_df, max_rank, whitelist_filter, contributing_variant_filter
         )
         return self.get_transcript_id(filtered_variants)
 
