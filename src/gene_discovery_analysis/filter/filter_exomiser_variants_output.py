@@ -28,17 +28,22 @@ class FilterExomiserVariantsOutput:
         num_changes = 0
         ranks = []
         for index, row in variants_df.iterrows():
-            if current_score is None or row['EXOMISER_GENE_COMBINED_SCORE'] != current_score:
+            if current_score is None or row["EXOMISER_GENE_COMBINED_SCORE"] != current_score:
                 current_rank += 1
                 current_rank += num_changes
                 num_changes = 0
-                current_score = row['EXOMISER_GENE_COMBINED_SCORE']
-            if index > 0 and row['EXOMISER_GENE_COMBINED_SCORE'] == variants_df.loc[
-                index - 1, 'EXOMISER_GENE_COMBINED_SCORE']:
-                if row['GENE_SYMBOL'] != variants_df.loc[index - 1, 'GENE_SYMBOL']:
+                current_score = row["EXOMISER_GENE_COMBINED_SCORE"]
+            if (
+                index > 0
+                and row["EXOMISER_GENE_COMBINED_SCORE"]
+                == variants_df.loc[index - 1, "EXOMISER_GENE_COMBINED_SCORE"]
+            ):
+                if row["GENE_SYMBOL"] != variants_df.loc[index - 1, "GENE_SYMBOL"]:
                     num_changes += 1
-                elif row['GENE_SYMBOL'] == variants_df.loc[index - 1, 'GENE_SYMBOL'] and row['MOI'] != variants_df.loc[
-                    index - 1, 'MOI']:
+                elif (
+                    row["GENE_SYMBOL"] == variants_df.loc[index - 1, "GENE_SYMBOL"]
+                    and row["MOI"] != variants_df.loc[index - 1, "MOI"]
+                ):
                     num_changes += 1
             ranks.append(current_rank)
         variants_df["NEW_RANK"] = ranks
@@ -69,11 +74,11 @@ class FilterExomiserVariantsOutput:
         return variants_df[variants_df["CONTRIBUTING_VARIANT"] != 0]
 
     def filter_output(
-            self,
-            variants_df: pd.DataFrame,
-            max_rank: int,
-            whitelist_filter: bool,
-            contributing_variant_filter: bool,
+        self,
+        variants_df: pd.DataFrame,
+        max_rank: int,
+        whitelist_filter: bool,
+        contributing_variant_filter: bool,
     ) -> pd.DataFrame:
         """Return filtered prioritised variant output."""
         filtered_variants = self.filter_max_rank(variants_df, max_rank)
@@ -84,17 +89,15 @@ class FilterExomiserVariantsOutput:
         return filtered_variants
 
     def create_filtered_output(
-            self,
-            variants_df: pd.DataFrame,
-            score_name: str,
-            max_rank: int,
-            whitelist_filter: bool,
-            contributing_variant_filter: bool,
+        self,
+        variants_df: pd.DataFrame,
+        score_name: str,
+        max_rank: int,
+        whitelist_filter: bool,
+        contributing_variant_filter: bool,
     ) -> pd.DataFrame:
         """Create the filtered prioritised variant output with annotated transcript ID."""
-        sorted_variants_df = self.rank_scores(
-            self.sort_results(variants_df, score_name)
-        )
+        sorted_variants_df = self.rank_scores(self.sort_results(variants_df, score_name))
         filtered_variants = self.filter_output(
             sorted_variants_df, max_rank, whitelist_filter, contributing_variant_filter
         )
@@ -102,7 +105,7 @@ class FilterExomiserVariantsOutput:
 
 
 def write_filtered_output(
-        variant_tsv_file: Path, output_dir: Path, filtered_variants_df: pd.DataFrame
+    variant_tsv_file: Path, output_dir: Path, filtered_variants_df: pd.DataFrame
 ) -> None:
     """Write filtered Exomiser variant tsv output to a tsv file."""
     filtered_variants_df.to_csv(
